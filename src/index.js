@@ -8,6 +8,10 @@ const taskRouter = require("./routers/tasks");
 //%Port
 const port = process.env.PORT;
 
+app.get("/", (req, res) => {
+  res.send("Online");
+});
+
 //% Middleware -->Watch video about middleware
 app.use(express.json());
 //Router
