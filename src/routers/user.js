@@ -93,9 +93,15 @@ router.patch("/users/me", auth, async (req, res) => {
   );
 
   //Validation requires stronger logic
+  try {
+    if (!isValidOperation) throw new Error();
+  } catch (error) {
+    res.status(400).send({ error: "Invalid updates" });
+  }
 
-  if (!isValidOperation) res.status(400).send({ error: "Invalid updates" });
+  // if (!isValidOperation) res.status(400).send({ error: "Invalid updates" });
 
+  //! This needs to be refactored
   try {
     updates.forEach((update) => (req.user[update] = body[update]));
     await req.user.save();
@@ -110,9 +116,9 @@ router.delete("/users/me", auth, async (req, res) => {
   try {
     await req.user.remove();
     sendByeEmail(req.user.email, req.user.name);
-    return res.send(req.user);
+    res.send(req.user);
   } catch (error) {
-    return res.status(500).send();
+    res.status(500).send();
   }
 });
 
